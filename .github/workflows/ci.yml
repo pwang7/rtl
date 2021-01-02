@@ -1,4 +1,4 @@
-name: LordOS-CI
+name: RTL-CI
 on:
   pull_request:
     branches: [main]
