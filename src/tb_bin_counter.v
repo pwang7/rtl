@@ -12,7 +12,7 @@ wire [2:0] q;
 
 initial begin            
     $dumpfile("wave.vcd");        // generate vcd file
-    $dumpvars(0, tb_bin_counter); // tb module name
+    $dumpvars;
 end
 
 // uut instantiation

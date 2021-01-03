@@ -1,0 +1,25 @@
+# read design
+read_verilog ../src/bin_counter.v
+hierarchy -check -top bin_counter
+
+# show0: print counter without high-level stuff
+show -notitle -stretch -format pdf -prefix counter_00
+
+# high-level synthesis
+proc; opt; fsm; opt; memory; opt; #techmap; opt;
+
+# show1: print counter with high-level stuff
+show -notitle -stretch -format pdf -prefix counter_01
+
+# mapping to internal cell library
+techmap; opt
+splitnets -ports;;
+
+# show3: print counter mappped with internal cell library
+show -notitle -stretch -format pdf -prefix counter_02
+
+# cleanup
+clean
+
+# output netlist
+write_verilog netlist.v
