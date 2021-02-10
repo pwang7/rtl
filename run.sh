@@ -18,13 +18,14 @@ set -o xtrace
 
 SHOW_WAVE=${SHOW_WAVE:-"true"}
 
-WAVE_FILE=wave.bin
+WAVE_SBIN=wave.sbin
+WAVE_LXT=wave.vcd
 BUILD_DIR=build
 
 mkdir -p $BUILD_DIR
 cd $BUILD_DIR
-iverilog -g2012 -Wall -Winfloop -o $WAVE_FILE -I ../src -y ../src ../src/*.v
-vvp -n $WAVE_FILE -lxt2
+iverilog -v -g2012 -Wall -Winfloop -o $WAVE_SBIN -I ../src -y ../src ../src/*.v
+vvp -v -N -lxt2 $WAVE_SBIN
 if [ "$SHOW_WAVE" = "true" ]; then
     GTKWAVE_PID=`pgrep gtkwave || echo "none"`
     if [ "$GTKWAVE_PID" != "none" ]; then
@@ -32,9 +33,9 @@ if [ "$SHOW_WAVE" = "true" ]; then
     fi
     OS=`uname -s`
     if [ "$OS" = "Darwin" ]; then
-        /Applications/gtkwave.app/Contents/Resources/bin/gtkwave wave.vcd ../wave.gtkw &
+        /Applications/gtkwave.app/Contents/Resources/bin/gtkwave $WAVE_LXT ../wave.gtkw &
     else
-        gtkwave wave.vcd ../wave.gtkw &
+        gtkwave $WAVE_LXT ../wave.gtkw &
     fi
 fi
 

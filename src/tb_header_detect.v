@@ -72,13 +72,19 @@ initial begin
     #CYCLE;
   end
   #(2*CYCLE);
-
-  if (result)
+  
+  if (result) begin
     $fdisplay(fd, "%m Test: SUCCESS, at %0d ns", $time);
-  else
+    //$finish_and_return(1);
+    $error("some error");
+    //$fatal(1);
+  end
+  else begin
     $fdisplay(fd, "%m Test: FAIL, at %0d ns", $time);
+    //$stop(2);
+  end
   $fclose(fd);
-  $stop;
+  //$stop(2);
 end
 
 always @(posedge clk or negedge rst_n) begin
