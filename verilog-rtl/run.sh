@@ -26,6 +26,8 @@ mkdir -p $BUILD_DIR
 cd $BUILD_DIR
 iverilog -v -g2012 -Wall -Winfloop -o $WAVE_SBIN -I ../src -y ../src ../src/*.v
 vvp -v -N -lxt2 $WAVE_SBIN
+yosys ../synth.ys
+
 if [ "$SHOW_WAVE" = "true" ]; then
     GTKWAVE_PID=`pgrep gtkwave || echo "none"`
     if [ "$GTKWAVE_PID" != "none" ]; then
