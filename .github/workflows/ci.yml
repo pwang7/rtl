@@ -16,6 +16,7 @@ jobs:
         env:
           SHOW_WAVE: false
         run: |
+          sudo apt-get update
           cd verilog-rtl
           sudo apt-get install -y iverilog
           sudo apt-get install -y yosys
@@ -24,5 +25,12 @@ jobs:
           cd ../spinal-rtl
           sudo apt-get install -y verilator
           #sudo apt-get install -y lcov
-          sbt "runMain TbCounter"
-          sbt test
+          #sudo apt-get install python3-pip
+          pip3 install cocotb
+          export PATH="$HOME/.local/bin:$PATH"
+          cocotb-config -h && cocotb-config -v
+          ./run.sh
+      - name: Setup tmate session
+        if: ${{ failure() }}
+        uses: mxschmitt/action-tmate@v3
+

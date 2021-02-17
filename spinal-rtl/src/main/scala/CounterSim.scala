@@ -3,7 +3,7 @@ import spinal.core._
 import spinal.core.sim._
 import java.security.KeyStore.TrustedCertificateEntry
 
-object TbCounter extends App{
+object CounterSim extends App{
   val CNT_WIDTH = 4
   val CNT_MAX = scala.math.pow(2, CNT_WIDTH).toInt - 1
 
