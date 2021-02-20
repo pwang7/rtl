@@ -14,7 +14,9 @@ object CounterSim extends App{
     //     defaultConfigForClockDomains = ClockDomainConfig(resetKind = SYNC)))
     .compile(new Counter(CNT_WIDTH))
     .doSim{dut=>
+      SimTimeout(100000)
       dut.clockDomain.forkStimulus(10)
+
     //   dut.clockDomain.assertReset()
     //   dut.clockDomain.waitSampling()
     //   dut.clockDomain.deassertReset()

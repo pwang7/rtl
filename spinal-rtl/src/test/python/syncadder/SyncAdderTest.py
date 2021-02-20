@@ -1,19 +1,22 @@
 import cocotb
 from cocotb.triggers import Timer
-from ref_model import adder_model
 from cocotb.clock import Clock
 from cocotb.triggers import RisingEdge
 import random
 
+def adderRefModel(a: int, b: int) -> int:
+    """ model of adder """
+    return a + b
+
 # A coroutine
-async def reset_dut(reset_n, duration_ns):
-    reset_n <= 0
+async def reset_dut(rst, duration_ns):
+    rst <= 1
     await Timer(duration_ns, units='ns')
-    reset_n <= 1
-    reset_n._log.debug("Reset complete")
+    rst <= 0
+    rst._log.debug("Reset complete")
 
 @cocotb.test()
-async def adder_basic_test(dut):
+async def adderBasicTest(dut):
     """Test for 5 + 10"""
     cocotb.fork(Clock(dut.clk, 10, units='ns').start())
 
@@ -21,23 +24,28 @@ async def adder_basic_test(dut):
     B = 10
 
     # Execution will block until reset_dut has completed
-    await reset_dut(dut.rst_n, 500)
+    await reset_dut(dut.reset, 500)
+    await RisingEdge(dut.clk)
     dut._log.debug("After reset")
+    assert dut.X.value == 0, "Adder result after reset is non-zero: {}".format(dut.X.value)
 
     dut.A <= A
     dut.B <= B
     await RisingEdge(dut.clk)
     await RisingEdge(dut.clk)
-    assert dut.X.value == adder_model(A, B), "Adder result is incorrect: {} != 15".format(dut.X.value)
+    assert dut.X.value == adderRefModel(A, B), "Adder result is incorrect: {} != 15".format(dut.X.value)
 
 
 @cocotb.test()
-async def adder_randomised_test(dut):
+async def adderRandomisedTest(dut):
     """Test for adding 2 random numbers multiple times"""
     cocotb.fork(Clock(dut.clk, 5, units='ns').start())
 
     # Run reset_dut concurrently
-    reset_thread = cocotb.fork(reset_dut(dut.rst_n, duration_ns=500))
+    reset_thread = cocotb.fork(reset_dut(dut.reset, duration_ns=500))
+    await reset_thread.join()
+    await RisingEdge(dut.clk)
+    assert dut.X.value == 0, "Adder result after reset is non-zero: {}".format(dut.X.value)
 
     for i in range(10):
 
@@ -50,6 +58,6 @@ async def adder_randomised_test(dut):
         await RisingEdge(dut.clk)
         await RisingEdge(dut.clk)
 
-        assert dut.X.value == adder_model(A, B), "Randomised test failed with: {A} + {B} = {X}".format(
+        assert dut.X.value == adderRefModel(A, B), "Randomised test failed with: {A} + {B} = {X}".format(
             A=dut.A.value, B=dut.B.value, X=dut.X.value)
 

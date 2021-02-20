@@ -8,9 +8,9 @@ set -o xtrace
 sbt "runMain CounterSim"
 sbt test
 
-# Cocotb simulation demo
-export CODEGEN=`realpath codegen`
-mkdir -p $CODEGEN
-sbt "runMain Adder $CODEGEN"
-cd src/test/python/adder
-make SIM=icarus
+# E2E UDP test
+cd src/test/python/udp/onnetwork
+timeout 5 make &
+sleep 3
+python3 Client.py
+
