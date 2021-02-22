@@ -1,3 +1,5 @@
+package spinal.exercises
+
 import spinal.core._
 
 class Counter(width : Int) extends Component{

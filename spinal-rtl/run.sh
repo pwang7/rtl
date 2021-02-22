@@ -4,8 +4,7 @@ set -o errexit
 set -o nounset
 set -o xtrace
 
-# Spinal HDL simulation demo
-sbt "runMain CounterSim"
+# sbt "runMain CounterSim"
 sbt test
 
 # E2E UDP test

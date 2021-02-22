@@ -32,4 +32,3 @@ class StreamJoinForkTest extends FunSuite {
 
   StreamJoinFork.errorId = 0
 }
-
