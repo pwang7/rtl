@@ -12,7 +12,6 @@ reg [7:0] din;
 integer fd;
 reg result;
 
-
 initial begin            
     $dumpfile("wave.vcd");        // generate vcd file
     $dumpvars;
@@ -76,7 +75,7 @@ initial begin
   if (result) begin
     $fdisplay(fd, "%m Test: SUCCESS, at %0d ns", $time);
     //$finish_and_return(1);
-    $error("some error");
+    //$error("some error");
     //$fatal(1);
   end
   else begin
@@ -85,6 +84,7 @@ initial begin
   end
   $fclose(fd);
   //$stop(2);
+  $finish;
 end
 
 always @(posedge clk or negedge rst_n) begin

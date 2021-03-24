@@ -92,7 +92,7 @@ initial begin
     #(4*T) // wait for 80ns
     // stop simulation
     // return to interactive simulation mode
-    $stop;
+    $finish;
 end
 
 endmodule

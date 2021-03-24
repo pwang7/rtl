@@ -72,6 +72,11 @@ module tb_non_block;
         //$stop;
     end
 
+initial begin            
+    $dumpfile("wave.vcd");        // generate vcd file
+    $dumpvars;
+end
+
 endmodule
 
 module tb_delta_delay;

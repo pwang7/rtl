@@ -21,12 +21,19 @@ SHOW_WAVE=${SHOW_WAVE:-"true"}
 WAVE_SBIN=wave.sbin
 WAVE_LXT=wave.vcd
 BUILD_DIR=build
+GFLAGS="-S ../gtkw.tcl"
 
 mkdir -p $BUILD_DIR
 cd $BUILD_DIR
-iverilog -v -g2012 -Wall -Winfloop -o $WAVE_SBIN -I ../src -y ../src ../src/*.v
-vvp -v -N -lxt2 $WAVE_SBIN
-yosys ../synth.ys
+for FILE in `ls ../src/tb_*.v`
+do
+    iverilog -v -g2012 -Wall -Winfloop -o $WAVE_SBIN -I ../src -y ../src $FILE
+    vvp -v -N -lxt2 $WAVE_SBIN
+done
+
+if command -v yosys; then
+    yosys ../synth.ys
+fi
 
 if [ "$SHOW_WAVE" = "true" ]; then
     GTKWAVE_PID=`pgrep gtkwave || echo "none"`
@@ -35,9 +42,9 @@ if [ "$SHOW_WAVE" = "true" ]; then
     fi
     OS=`uname -s`
     if [ "$OS" = "Darwin" ]; then
-        /Applications/gtkwave.app/Contents/Resources/bin/gtkwave $WAVE_LXT ../wave.gtkw &
+        /Applications/gtkwave.app/Contents/Resources/bin/gtkwave $GFLAGS $WAVE_LXT &
     else
-        gtkwave $WAVE_LXT ../wave.gtkw &
+        gtkwave $GFLAGS $WAVE_LXT &
     fi
 fi
 
