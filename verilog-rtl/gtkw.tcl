@@ -8,6 +8,9 @@
 # Also see the GTKWave source code file: examples/des.tcl
 # https://ughe.github.io/2018/11/13/gtkwave-automation
 
+package require Tcl 8.6
+#wm attributes . -fullscreen 1
+
 # Add all signals
 set nfacs [ gtkwave::getNumFacs ]
 set all_facs [list]
@@ -20,6 +23,7 @@ puts "num signals added: $num_added"
 
 # zoom full
 gtkwave::/Time/Zoom/Zoom_Full
+
 
 # Print
 # set dumpname [ gtkwave::getDumpFileName ]

@@ -2,7 +2,7 @@ name := "spinal-rtl"
 
 version := "0.1.0"
 
-scalaVersion := "2.11.12"
+scalaVersion := "2.12.13"
 val spinalVersion = "1.4.3"
 
 libraryDependencies ++= Seq(

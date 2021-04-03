@@ -3,7 +3,30 @@ package spinal.exercises
 import spinal.sim._
 import spinal.core._
 import spinal.core.sim._
-import java.security.KeyStore.TrustedCertificateEntry
+
+class Counter(width : Int) extends Component{
+  val io = new Bundle{
+    val clear = in Bool
+    val value = out UInt(width bits)
+  }
+
+  val register = Reg(UInt(width bits)) init(0)
+  register.addAttribute("keep")
+  when(io.clear){
+    register := 0
+    println("counter cleared")
+  }.otherwise{
+    register := register + 1
+  }
+
+  io.value := register
+}
+
+object Counter {
+  def main(args: Array[String]) {
+    SpinalSystemVerilog(new Counter(8))
+  }
+}
 
 object CounterSim extends App{
   val CNT_WIDTH = 4

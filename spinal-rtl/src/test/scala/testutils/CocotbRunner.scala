@@ -13,11 +13,11 @@ object CocotbRunner{
     getCocotbPass(path)
   }
 
-  def doCmd(cmds : Seq[String]): Unit ={
-    var out,err : String = null
+  def doCmd(cmds: Seq[String]): Unit ={
+    var out, err: String = null
     val io = new ProcessIO(
       stdin  => {
-        for(cmd <- cmds)
+        for (cmd <- cmds)
           stdin.write((cmd + "\n").getBytes)
         stdin.close()
       },
@@ -37,7 +37,7 @@ object CocotbRunner{
 
   def getCocotbPass(path : String) : Boolean = {
     import scala.io.Source
-    for(line <- Source.fromFile(path + "/results.xml").getLines()) {
+    for (line <- Source.fromFile(path + "/results.xml").getLines()) {
       if (line.contains("failure") || line.contains("skipped")){
         return false
       }

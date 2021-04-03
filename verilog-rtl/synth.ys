@@ -13,7 +13,7 @@ show -notitle -stretch -format pdf -prefix counter_01
 
 # mapping to internal cell library
 techmap; opt
-splitnets -ports;;
+splitnets -ports
 
 # show3: print counter mappped with internal cell library
 show -notitle -stretch -format pdf -prefix counter_02
@@ -23,3 +23,6 @@ clean
 
 # output netlist
 write_verilog netlist.v
+
+# output schematic
+write_json schematic.json
