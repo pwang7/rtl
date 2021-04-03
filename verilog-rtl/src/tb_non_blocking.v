@@ -41,7 +41,7 @@ module tb_non_block;
     // Instantiate the Unit Under Test (UUT)
     non_block #(.WIDTH(WIDTH)) uut (
         .clk(clk), 
-	.rst_n(rst_n),
+        .rst_n(rst_n),
         .a(a), 
         .b(b), 
         .c(c)

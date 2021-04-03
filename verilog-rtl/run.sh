@@ -25,14 +25,23 @@ GFLAGS="-S ../gtkw.tcl"
 
 mkdir -p $BUILD_DIR
 cd $BUILD_DIR
-for FILE in `ls ../src/tb_*.v`
+
+# Simulation
+for TB in `ls ../src/tb*.v`
 do
-    iverilog -v -g2012 -Wall -Winfloop -o $WAVE_SBIN -I ../src -y ../src $FILE
+    iverilog -v -g2012 -Wall -Winfloop -o $WAVE_SBIN -I ../src -y ../src $TB
     vvp -v -N -lxt2 $WAVE_SBIN
 done
 
+# MIPS32 simulation
+MIPS32_SBIN=mips32.sbin
+iverilog -v -g2012 -Wall -Winfloop -o $MIPS32_SBIN -I ../src -y ../src ../src/mips32/mips32.v ../src/mips32/tb_mips32*.v
+vvp -v -N -lxt2 $MIPS32_SBIN
+
+# Synthesis
 if command -v yosys; then
     yosys ../synth.ys
+    # yosys -p "hierarchy -check; proc; opt; fsm; opt; write_json schematic.json" ../src/bin_counter.v
 fi
 
 if [ "$SHOW_WAVE" = "true" ]; then

@@ -33,7 +33,7 @@ object FifoCCSim {
       // Forever, randomly toggle one of the clocks.
       // This will create asynchronous clocks without fixed frequencies.
       while (true) {
-        if(Random.nextBoolean()) {
+        if (Random.nextBoolean()) {
           dut.pushClock.clockToggle()
         } else {
           dut.popClock.clockToggle()
