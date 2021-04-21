@@ -1,5 +1,8 @@
 `default_nettype none
 
+// Setup Slack = Tcycle + Tclk2 - Tsu - (Tclk1 + Tco + Tdata)
+// Hold Slack = Tcycle + Tclk1 + Tco + Tdata - (Tcycle + Tclk2 + Th)
+
 // 组合逻辑：多路器、加法器、缓冲器、逻辑开关、总线、逻辑运算电路
 // 时序逻辑：计数器、同步有限状态机、运算控制器、总线分配器
 

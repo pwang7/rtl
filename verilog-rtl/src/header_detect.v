@@ -48,8 +48,6 @@ always @(posedge clk or negedge rst_n) begin
     else
        cnt1 <= cnt1 + 1;
   end
-  // else
-  //   cnt1 <= 0;
 end
 assign add_cnt1 = flag_add && end_cnt0;
 assign end_cnt1 = add_cnt1 && cnt1 == 5-1;

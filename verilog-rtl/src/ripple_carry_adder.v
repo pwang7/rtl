@@ -14,7 +14,7 @@ module full_adder(a, b, cin, sum, cout);
    assign cout = t1 & cin;
    assign sum = t1 ^ cin;
    assign cout = t2 | cout;
-endmodule // full_adder
+endmodule
 
 module ripple_carry_adder(input1, input2, answer);
    input [31:0] input1, input2;
