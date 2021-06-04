@@ -15,33 +15,31 @@ reg eachvec;
 reg clk_i;
 reg iStart;
 reg rst_n;
-reg  [DATAWIDTH-1:0] iData;                                            
-wire [DATAWIDTH-1:0]  oData;
+reg  [`DATAWIDTH-1:0] iData;
+wire [`DATAWIDTH-1:0] oData;
 wire oStart;
 wire [9:0]data121;
                         
-LPL_Sobel TB(  
- 
+LPL_Sobel TB(
 	.clk_i(clk_i),    //时钟
-	.rst_n(rst_n)     //复位
+	.rst_n(rst_n),    //复位
 	.iData(iData),    //输入数据
 	.iStart(iStart),  //输入开始控制信号
 	.oData(oData),    //输出数据
 	.oStart(oStart),  //输出开始控制信号
-	.data121(data121),//中间变量
- 
+	.data121(data121) //中间变量
 );
  
-reg [DATAWIDTH-1:0]image_rom[307199:0];
+reg [`DATAWIDTH-1:0]image_rom[307199:0];
 integer SDRAM_addr = 0;
 integer fileoutput;
+integer InputImage;
  
-initial                                                
-begin
+initial begin
 	$display("Running TestBench");
 	InputImage = $fopen("Oct16_InputImage.txt","r");
 	fileoutput = $fopen("../Ap16_ImageData/out.txt");
-	$readmemh("../Ap16_ImageData/1.txt",image_rom);
+	$readmemh("../Ap16_ImageData/1.txt", image_rom);
 /*
  $random %b;
 {$random}%b ；
@@ -73,8 +71,8 @@ $fclose  (MCD);
 	iData = 0;
 	iStart = 0;
 	rst_n = 0;
-#100 rst_n = 1;
-#25	iStart = 1;
+    #100 rst_n = 1;
+    #25 iStart = 1;
 	iData = image_rom[SDRAM_addr];
 	repeat(307199)begin
 	#10 SDRAM_addr = SDRAM_addr +1;

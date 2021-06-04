@@ -10,7 +10,7 @@ reg [2:0] d;
 wire max_tick, min_tick;
 wire [2:0] q;
 
-initial begin            
+initial begin
     $dumpfile("wave.vcd");        // generate vcd file
     $dumpvars;
 end

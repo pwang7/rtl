@@ -6,7 +6,7 @@ integer seed;
 
 ripple_carry_adder dut(input1, input2, actual);
 
-initial begin            
+initial begin
     $dumpfile("wave.vcd");        // generate vcd file
     $dumpvars;
 end

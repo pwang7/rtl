@@ -516,6 +516,11 @@ module tb1;
         rst_n = 1;
     end
 
+    initial begin
+        $dumpfile("wave.vcd");        // generate vcd file
+        $dumpvars;
+    end
+
     reg din;
     initial begin
         #1;
@@ -539,14 +544,12 @@ module tb2;
     reg clk;
     reg value;
 
-    initial    // clock generation
-    begin
-    clk = 0;
-    forever #10 clk = ~clk;
+    initial begin
+        clk = 0;  // clock generation
+        forever #10 clk = ~clk;
     end
 
-    initial
-    begin
+    initial begin
         @(posedge clk);
         while(value == 0) @(posedge clk);
         repeat(100) @(posedge clk);

@@ -38,6 +38,11 @@ MIPS32_SBIN=mips32.sbin
 iverilog -v -g2012 -Wall -Winfloop -o $MIPS32_SBIN -I ../src -y ../src ../src/mips32/mips32.v ../src/mips32/tb_mips32*.v
 vvp -v -N -lxt2 $MIPS32_SBIN
 
+# SDRAM simulation
+SDRAM_SBIN=sdram.sbin
+iverilog -v -g2012 -Wall -Winfloop -o $SDRAM_SBIN -I ../src -y ../src ../src/sdram/sdram_*.v ../src/sdram/tb_sdram_top.v
+vvp -v -N -lxt2 $SDRAM_SBIN
+
 # Synthesis
 if command -v yosys; then
     yosys ../synth.ys

@@ -12,7 +12,7 @@ reg [7:0] din;
 integer fd;
 reg result;
 
-initial begin            
+initial begin
     $dumpfile("wave.vcd");        // generate vcd file
     $dumpvars;
 end

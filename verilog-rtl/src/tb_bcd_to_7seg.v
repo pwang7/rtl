@@ -11,43 +11,40 @@ parameter TP = 1;
 parameter CLK_HALF_PERIOD = 5;
  
 // assign clk = #CLK_HALF_PERIOD ~clk;  // Create a clock with a period of ten ns
-initial
-begin
+initial begin
     clk = 0;
     #5;
     forever clk = #( CLK_HALF_PERIOD )  ~clk;
 end
 
-initial
-begin
-   $dumpfile("wave.vcd");
-   $dumpvars;
-   // clk  = #CLK_HALF_PERIOD ~clk; 
-   $display("%0t, Reseting system", $time);
-   error_count = 0;
-   bcd  = 4'h0;
-   reset = #TP 1'b1;
-   repeat (30) @ (posedge clk);
-   reset  = #TP 1'b0;
-   repeat (30) @ (posedge clk);
-   $display("%0t, Begin BCD test", $time); // This displays a message
+initial begin
+    $dumpfile("wave.vcd");
+    $dumpvars;
+    // clk  = #CLK_HALF_PERIOD ~clk;
+    $display("%0t, Reseting system", $time);
+    error_count = 0;
+    bcd  = 4'h0;
+    reset = #TP 1'b1;
+    repeat (30) @ (posedge clk);
+    reset  = #TP 1'b0;
+    repeat (30) @ (posedge clk);
+    $display("%0t, Begin BCD test", $time); // This displays a message
 
-   for (ii = 0; ii < 10; ii = ii + 1) begin
-       repeat (1) @ (posedge clk);
-       bcd  = ii[3:0];
-       repeat (1) @ (posedge clk); 
-       if (seven_seg_display !== seven_seg_prediction(bcd)) 
-           begin
-               $display(
-                   "%0t, ERROR: For BCD %d, module output 0b%07b does not match prediction logic value of 0b%07b.",
-                   $time, bcd, seven_seg_display, seven_seg_prediction(bcd)
-               );
-               error_count = error_count + 1;
-           end
-       end
-   $display("%0t, Test Complete with %d errors", $time, error_count);
-   $display("%0t, Test %s", $time, ~|error_count ? "pass." : "fail.");
-   $finish ; // This causes the simulation to end.
+    for (ii = 0; ii < 10; ii = ii + 1) begin
+        repeat (1) @ (posedge clk);
+        bcd  = ii[3:0];
+        repeat (1) @ (posedge clk);
+        if (seven_seg_display !== seven_seg_prediction(bcd)) begin
+            $display(
+                "%0t, ERROR: For BCD %d, module output 0b%07b does not match prediction logic value of 0b%07b.",
+                $time, bcd, seven_seg_display, seven_seg_prediction(bcd)
+            );
+            error_count = error_count + 1;
+        end
+    end
+    $display("%0t, Test Complete with %d errors", $time, error_count);
+    $display("%0t, Test %s", $time, ~|error_count ? "pass." : "fail.");
+    $finish; // This causes the simulation to end.
 end
 
 parameter SEG_A = 7'b0000001;
