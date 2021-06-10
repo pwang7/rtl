@@ -361,3 +361,6 @@ all_latches
 
 # Tcl store
 xilinx::designutils::check_cdc_paths
+
+check_timing -verbose # check unconstrained
+report_analysis_coverage -status_details untested -check setup # report coverage
