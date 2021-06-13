@@ -47,6 +47,7 @@ vvp -v -N -lxt2 $SDRAM_SBIN
 if command -v yosys; then
     yosys ../synth.ys
     # yosys -p "hierarchy -check; proc; opt; fsm; opt; write_json schematic.json" ../src/bin_counter.v
+    # yosys -p 'read -sv axi_addr.v; synth_xilinx; show'
 fi
 
 if [ "$SHOW_WAVE" = "true" ]; then

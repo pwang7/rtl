@@ -13,6 +13,7 @@ integer fd;
 reg result;
 
 initial begin
+    $dumpportsall;
     $dumpfile("wave.vcd");        // generate vcd file
     $dumpvars;
 end
@@ -84,7 +85,7 @@ initial begin
   end
   $fclose(fd);
   //$stop(2);
-  $finish;
+  $finish(2);
 end
 
 always @(posedge clk or negedge rst_n) begin

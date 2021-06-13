@@ -11,6 +11,7 @@ wire max_tick, min_tick;
 wire [2:0] q;
 
 initial begin
+    $dumpportsall;
     $dumpfile("wave.vcd");        // generate vcd file
     $dumpvars;
 end
@@ -92,7 +93,7 @@ initial begin
     #(4*T) // wait for 80ns
     // stop simulation
     // return to interactive simulation mode
-    $finish;
+    $finish(2);
 end
 
 endmodule

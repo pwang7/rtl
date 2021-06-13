@@ -18,6 +18,7 @@ initial begin
 end
 
 initial begin
+    $dumpportsall;
     $dumpfile("wave.vcd");
     $dumpvars;
     // clk  = #CLK_HALF_PERIOD ~clk;
@@ -44,7 +45,7 @@ initial begin
     end
     $display("%0t, Test Complete with %d errors", $time, error_count);
     $display("%0t, Test %s", $time, ~|error_count ? "pass." : "fail.");
-    $finish; // This causes the simulation to end.
+    $finish(2); // This causes the simulation to end.
 end
 
 parameter SEG_A = 7'b0000001;
