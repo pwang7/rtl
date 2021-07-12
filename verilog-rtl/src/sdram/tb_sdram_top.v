@@ -60,9 +60,9 @@ sdram_top u_sdram_top(
 );
 
 sdram_model_plus u_sdram_model_plus(
-    .Dq      (sdram_data),
+    .Dq      (sdram_dq),
     .Addr    (sdram_addr),
-    .Ba      (sdram_ba),
+    .Ba      (sdram_bank),
     .Clk     (sdram_clk),
     .Cke     (sdram_cke),
     .Cs_n    (sdram_cs_n),

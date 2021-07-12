@@ -57,8 +57,8 @@ sdram_top u_sdram_top(
     .rd_trig     (rd_trig     )
 );
 
-sdram_model_plus u_model_plus(
-    .Dq      (sdram_data),
+sdram_model_plus u_sdram_model_plus(
+    .Dq      (sdram_dq),
     .Addr    (sdram_addr),
     .Ba      (sdram_ba),
     .Clk     (sdram_clk),

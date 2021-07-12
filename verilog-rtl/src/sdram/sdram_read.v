@@ -68,8 +68,10 @@ always@(posedge sclk or negedge reset)begin
 end
 //burst_cnt_t
 always@(posedge sclk or negedge reset)begin
+	if(!reset)
+		burst_cnt_t <= 0;
+	else
 		burst_cnt_t	<= burst_cnt;
- 
 end
 //--------------------STATE-----------------------
 always@(posedge sclk or negedge reset)begin
