@@ -112,8 +112,11 @@ always @(posedge sclk or negedge s_rst_n) begin
         burst_cnt <= 'b0;
 end
 
-always@(posedge sclk or negedge s_rst_n)begin
-    burst_cnt_t <= burst_cnt;
+always@(posedge sclk or negedge s_rst_n) begin
+    if (!s_rst_n)
+        burst_cnt_t <= 'b0;
+    else
+        burst_cnt_t <= burst_cnt;
 end
 
 always @(posedge sclk or negedge s_rst_n) begin

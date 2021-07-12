@@ -51,7 +51,7 @@
 *       Micron Technology Inc.
 ****************************************************************************************/
 
-`timescale 1ns / 100ps
+//`timescale 1ns / 100ps
 
 module sdram_model_plus (Dq, Addr, Ba, Clk, Cke, Cs_n, Ras_n, Cas_n, We_n, Dqm,Debug);
 

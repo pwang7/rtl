@@ -58,7 +58,7 @@ localparam		  READ		  =	   5'b1_0000		;
 //				wire				 ref_req		;	//已经有了刷新命令			
 //				wire				 rd_trig		;
 				wire[3:0]			 rd_cmd			;
-				wire[11:0]			 rd_addr		;
+				wire[12:0]			 rd_addr		;
 				wire[1:0]			 rd_bank_addr	;
  
 					

@@ -148,7 +148,7 @@ always @(*) begin
     endcase
 end
 
-sdram_int sdram_int_inst(
+sdram_init sdram_init_inst(
     .sclk(sclk),
     .s_rst_n(s_rst_n),
     .cmd_reg(init_cmd),
