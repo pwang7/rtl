@@ -2,6 +2,7 @@ name: RTL-CI
 on:
   pull_request:
     branches: [main]
+  schedule: [cron: "0 */24 * * *"]
 
 jobs:
   build-and-simulate:
@@ -23,9 +24,13 @@ jobs:
         run: |
           sudo apt-get update
           cd verilog-rtl
-          sudo apt-get install -y iverilog
-          sudo apt-get install -y yosys
-          sudo apt-get install -y gtkwave
+          sudo apt-get install -y iverilog yosys
+          #sudo apt-get install -y gtkwave
+          sudo apt-get install expect
+          # Install TLV code generator
+          pip3 install sandpiper-saas
+          # Confirm sandpiper agreement
+          ./src/riscv_pll/sandpiper-confirm.sh
           ./run.sh
           cd ../spinal-rtl
           sudo apt-get install -y verilator
@@ -34,7 +39,7 @@ jobs:
           # Local install Cocotb and set PATH env
           pip3 install cocotb
           export PATH="$HOME/.local/bin:$PATH"
-          ./run.sh
+          #./run.sh
       - name: Setup tmate session
         if: ${{ failure() }}
         uses: mxschmitt/action-tmate@v3
