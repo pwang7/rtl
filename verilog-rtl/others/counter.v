@@ -2,8 +2,8 @@
 // http://neilturley.dev/netlistsvg/
 // http://www.clifford.at/yosys/nogit/YosysJS/snapshot/demo02.html
 
-module top_module #(
-  parameter WIDTH = 4
+module counter #(
+  parameter integer WIDTH = 4
 )(
   output wire [WIDTH:0] io_cnt,
   input  wire           clk,

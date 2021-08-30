@@ -11,7 +11,7 @@ reg [7:0] cnt0, cnt1;
 wire add_cnt0, add_cnt1;
 wire end_cnt0, end_cnt1;
 wire flag_add;
-  
+
 always @(posedge clk or negedge rst_n) begin
   if (!rst_n) begin
     din_r0 <= 0;
