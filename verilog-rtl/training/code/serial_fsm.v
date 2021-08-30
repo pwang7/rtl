@@ -7,51 +7,53 @@ module serial_fsm2(
     input reset,    // Synchronous reset
     output [7:0] out_byte,
     output done
-); 
-    
-    localparam idle = 0;
-    localparam start = 1;
-    localparam data = 2;
-    localparam stop =3;
-    localparam error = 4;
-    
+);
+
+    localparam integer idle = 0;
+    localparam integer start = 1;
+    localparam integer data = 2;
+    localparam integer stop = 3;
+    localparam integer error = 4;
+
     reg[2:0] state, next_state;
     reg[3:0] cnt;
     reg done_r;
     reg[7:0] out;
-    
+
 //transition
-    always@(*)begin
+    always@(*) begin
         case(state)
-            idle:next_state=in?idle:start;
-            start:next_state=data;
-            data:next_state=(cnt==8)?(in?stop:error):data;
-            stop:next_state=in?idle:start;
-            error:next_state=in?idle:error;
+            idle: next_state = in ? idle : start;
+            start: next_state = data;
+            data: next_state = (cnt == 8) ? (in ? stop : error) : data;
+            stop: next_state = in ? idle : start;
+            error: next_state = in ? idle : error;
+            default: next_state = idle;
         endcase
     end
-    
+
 //state
-    always@(posedge clk)begin
+    always@(posedge clk) begin
         if(reset)
             state <= idle;
         else
             state <= next_state;
     end
-    
+
 //out
-    always@(posedge clk)begin
+    always@(posedge clk) begin
         if(reset)
             out<=0;
         else
             case(next_state)
-                start:out<=0;
-                data:out<={in,out[7:1]}; //移位寄存器
+                start: out <= 0;
+                data: out <= {in, out[7:1]}; //移位寄存器
+                default: out <= 0;
             endcase
     end
-    
+
 //cnt
-    always@(posedge clk)begin
+    always@(posedge clk) begin
         if(reset)
             cnt<=0;
         else
@@ -61,17 +63,16 @@ module serial_fsm2(
                 default:cnt<=cnt;
             endcase
     end
-    
+
 //done_r
     always@(posedge clk)
         case(next_state)
-            stop:done_r <= 1;
-            default:done_r <= 0;
+            stop: done_r <= 1;
+            default: done_r <= 0;
         endcase
-    
+
     assign done = done_r;
     assign out_byte = out;
-    
 endmodule
 
 module serial_fsm(
@@ -85,15 +86,15 @@ module serial_fsm(
     // Use FSM from Fsm_serial
 
     // New: Datapath to latch input bits.
-    parameter IDLE = 0, START = 1, DATA = 2, STOP = 3, ERROR = 4;
+    parameter integer IDLE = 0, START = 1, DATA = 2, STOP = 3, ERROR = 4;
     reg [2:0] state_c, state_n;
     reg done_r;
-    
+
     always @ (posedge clk) begin
         if (reset)
             state_c <= IDLE;
         else
-        	state_c <= state_n;
+            state_c <= state_n;
     end
 
     reg [3:0] cnt;
@@ -114,12 +115,12 @@ module serial_fsm(
 
     always @ (*) begin
         case (state_c)
-        	IDLE: state_n = in ? IDLE : START;
+            IDLE: state_n = in ? IDLE : START;
             START: state_n = DATA;
             DATA: state_n = end_cnt ? (in ? STOP : ERROR) : DATA;
             STOP: state_n = in ? IDLE : START;
             ERROR: state_n = in ? IDLE : ERROR;
-            default: ;
+            default: state_n = IDLE;
         endcase
     end
 
@@ -127,12 +128,12 @@ module serial_fsm(
         if (reset)
             done_r <= 0;
         else if (state_n == STOP)
-        	done_r <= 1;
+            done_r <= 1;
         else
             done_r <= 0;
     end
     assign done = done_r;
-    
+
     reg [7:0] out_byte_r;
     always @ (posedge clk) begin
         if (reset) begin
@@ -142,6 +143,6 @@ module serial_fsm(
             out_byte_r <= {in, out_byte_r[7:1]};
         end
     end
-    
+
     assign out_byte = out_byte_r;
 endmodule

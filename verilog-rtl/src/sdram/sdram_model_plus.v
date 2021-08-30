@@ -1,18 +1,18 @@
 /***************************************************************************************
-作者：	李晟
-2003-08-27	V0.1	李晟 
- 
- 添加内存模块倒空功能，在外部需要创建事件：sdram_r ,本SDRAM的内容将会按Bank 顺序damp out 至文件
- sdram_data.txt 中
+作者：李晟
+2003-08-27 V0.1 李晟
+
+添加内存模块倒空功能，在外部需要创建事件：sdram_r ,本SDRAM的内容将会按Bank 顺序damp out 至文件
+sdram_data.txt 中
 ×××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××*/
-//2004-03-04	陈乃奎	修改原程序中将BANK的数据转存入TXT文件的格式
-//2004-03-16	陈乃奎	修改SDRAM 的初始化数据
-//2004/04/06	陈乃奎	将SDRAM的操作命令以字符形式表示，以便用MODELSIM监视
-//2004/04/19	陈乃奎	修改参数 parameter tAC  =   8;
-//2010/09/17	罗瑶	修改sdram的大小，数据位宽，dqm宽度;
+//2004-03-04  陈乃奎  修改原程序中将BANK的数据转存入TXT文件的格式
+//2004-03-16  陈乃奎  修改SDRAM 的初始化数据
+//2004/04/06  陈乃奎  将SDRAM的操作命令以字符形式表示，以便用MODELSIM监视
+//2004/04/19  陈乃奎  修改参数 parameter tAC  =   8;
+//2010/09/17  罗瑶    修改sdram的大小，数据位宽，dqm宽度;
 /****************************************************************************************
 *
-*    File Name:  sdram_model.V  
+*    File Name:  sdram_model.v
 *      Version:  0.0f
 *         Date:  July 8th, 1999
 *        Model:  BUS Functional
@@ -33,8 +33,8 @@
 *         Note:  - Set simulator resolution to "ps" accuracy
 *                - Set Debug = 0 to disable $display messages
 *
-*   Disclaimer:  THESE DESIGNS ARE PROVIDED "AS IS" WITH NO WARRANTY 
-*                WHATSOEVER AND MICRON SPECIFICALLY DISCLAIMS ANY 
+*   Disclaimer:  THESE DESIGNS ARE PROVIDED "AS IS" WITH NO WARRANTY
+*                WHATSOEVER AND MICRON SPECIFICALLY DISCLAIMS ANY
 *                IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR
 *                A PARTICULAR PURPOSE, OR AGAINST INFRINGEMENT.
 *
@@ -55,10 +55,10 @@
 
 module sdram_model_plus (Dq, Addr, Ba, Clk, Cke, Cs_n, Ras_n, Cas_n, We_n, Dqm,Debug);
 
-    parameter addr_bits =	11;
-    parameter data_bits = 	32;
-    parameter col_bits  =	8;
-    parameter mem_sizes =	1048576*2-1;//1 Meg 
+    parameter integer addr_bits = 11;
+    parameter integer data_bits = 32;
+    parameter integer col_bits  = 8;
+    parameter integer mem_sizes = 1048576*2-1; //1 Meg 
 
     inout     [data_bits - 1 : 0] Dq;
     input     [addr_bits - 1 : 0] Addr;
@@ -71,7 +71,7 @@ module sdram_model_plus (Dq, Addr, Ba, Clk, Cke, Cs_n, Ras_n, Cas_n, We_n, Dqm,D
     input                         We_n;
     input                 [3 : 0] Dqm;          //高低各8bit
     //added by xzli
-    input			  Debug;
+    input                         Debug;
 
     reg       [data_bits - 1 : 0] Bank0 [0 : mem_sizes];//存储器类型数据
     reg       [data_bits - 1 : 0] Bank1 [0 : mem_sizes];

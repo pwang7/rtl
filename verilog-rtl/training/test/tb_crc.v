@@ -2,7 +2,7 @@
 
 module tb_crc();
 
-localparam CYCLE = 2;
+localparam integer CYCLE = 2;
 
 reg clk;
 reg rst_n;
@@ -22,7 +22,7 @@ initial begin
     wait(rst_n == 1);
     repeat(100) begin
         d = d + 1;
-        #CYCLE din = d; 
+        #CYCLE din = d;
         en = 1;
     end
     en = 0;

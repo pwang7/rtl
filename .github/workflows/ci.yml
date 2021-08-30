@@ -25,7 +25,7 @@ jobs:
           sudo apt-get update
           cd verilog-rtl
           sudo apt-get install -y iverilog yosys
-          #sudo apt-get install -y gtkwave
+          # sudo apt-get install -y gtkwave
           sudo apt-get install expect
           # Install TLV code generator
           pip3 install sandpiper-saas
@@ -34,12 +34,16 @@ jobs:
           ./run.sh
           cd ../spinal-rtl
           sudo apt-get install -y verilator
-          #sudo apt-get install -y lcov
-          #sudo apt-get install python3-pip
+          # sudo apt-get install -y lcov
+          # sudo apt-get install python3-pip
           # Local install Cocotb and set PATH env
           pip3 install cocotb
           export PATH="$HOME/.local/bin:$PATH"
           #./run.sh
+      #- name: Run Verible linter action
+      #  uses: chipsalliance/verible-linter-action@main
+      #  with:
+      #    github_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Setup tmate session
         if: ${{ failure() }}
         uses: mxschmitt/action-tmate@v3

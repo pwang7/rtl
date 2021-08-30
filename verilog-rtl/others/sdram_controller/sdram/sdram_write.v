@@ -12,17 +12,17 @@ module sdram_write (
     output reg [15:0] wr_data
 );
 
-localparam S_IDLE = 5'b00001;
-localparam S_REQ = 5'b00010;
-localparam S_ACT = 5'b00100;
-localparam S_WR = 5'b01000;
-localparam S_PRE = 5'b10000;
+localparam reg[4:0] S_IDLE = 5'b00001;
+localparam reg[4:0] S_REQ = 5'b00010;
+localparam reg[4:0] S_ACT = 5'b00100;
+localparam reg[4:0] S_WR = 5'b01000;
+localparam reg[4:0] S_PRE = 5'b10000;
 
-localparam CMD_NOP = 4'b0111;
-localparam CMD_PRE = 4'b0010;
-localparam CMD_AREF = 4'b0001;
-localparam CMD_ACT = 4'b0011;
-localparam CMD_WR = 4'b0100;
+localparam reg[3:0] CMD_NOP = 4'b0111;
+localparam reg[3:0] CMD_PRE = 4'b0010;
+localparam reg[3:0] CMD_AREF = 4'b0001;
+localparam reg[3:0] CMD_ACT = 4'b0011;
+localparam reg[3:0] CMD_WR = 4'b0100;
 
 reg flag_wr;
 reg [4:0] state;
@@ -226,10 +226,11 @@ assign wr_req = state[1]; // state == S_REQ;
 
 always @(*) begin
     case (burst_cnt_t)
-        0: wr_data <= 'd3;
-        1: wr_data <= 'd5;
-        2: wr_data <= 'd7;
-        3: wr_data <= 'd9;
+        0: wr_data = 'd3;
+        1: wr_data = 'd5;
+        2: wr_data = 'd7;
+        3: wr_data = 'd9;
+        default: wr_data = 'd0;
     endcase
 end
 
