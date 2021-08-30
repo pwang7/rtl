@@ -35,13 +35,19 @@ done
 
 # MIPS32 simulation
 MIPS32_SBIN=mips32.sbin
-iverilog -v -g2012 -Wall -Winfloop -o $MIPS32_SBIN -I ../src -y ../src ../src/mips32/mips32.v ../src/mips32/tb_mips32*.v
-vvp -v -N -lxt2 $MIPS32_SBIN
+#iverilog -v -g2012 -Wall -Winfloop -o $MIPS32_SBIN -I ../src/mips32 -y ../src/mips32 ../src/mips32/tb_mips32*.v
+#vvp -v -N -lxt2 $MIPS32_SBIN
 
 # SDRAM simulation
 SDRAM_SBIN=sdram.sbin
-iverilog -v -g2012 -Wall -Winfloop -o $SDRAM_SBIN -I ../src -y ../src ../src/sdram/sdram_*.v ../src/sdram/tb_sdram_top.v
-vvp -v -N -lxt2 $SDRAM_SBIN
+#iverilog -v -g2012 -Wall -Winfloop -o $SDRAM_SBIN -I ../src/sdram -y ../src/sdram ../src/sdram/tb_sdram_top.v
+#vvp -v -N -lxt2 $SDRAM_SBIN
+
+# RISC-V PLL simulation
+RISCV_PLL_SBIN=riscv_pll.sbin
+sandpiper-saas -i ../src/riscv_pll/rvmyth.tlv -o rvmyth.v --iArgs --default_includes
+iverilog -v -Wall -Winfloop -o $RISCV_PLL_SBIN -I ../src/riscv_pll -y ../src/riscv_pll -I ./includes/ -y ./includes/proj_verilog/ -I ./includes/proj_verilog/ ../src/riscv_pll/rvmyth_pll_tb.v
+vvp -v -N -lxt2 $RISCV_PLL_SBIN
 
 # Synthesis
 if command -v yosys; then
