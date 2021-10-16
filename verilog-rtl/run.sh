@@ -44,20 +44,20 @@ iverilog -v -g2012 -Wall -Winfloop -o $SDRAM_SBIN -I ../src/sdram -y ../src/sdra
 vvp -v -N -lxt2 $SDRAM_SBIN
 
 # RISC-V PLL simulation
+if command -v sandpiper-saas; then
 RISCV_PLL_SBIN=riscv_pll.sbin
 sandpiper-saas -i ../src/riscv_pll/rvmyth.tlv -o rvmyth.v --iArgs --default_includes
 iverilog -v -Wall -Winfloop -o $RISCV_PLL_SBIN -I ../src/riscv_pll -y ../src/riscv_pll -I ./includes/ -y ./includes/proj_verilog/ -I ./includes/proj_verilog/ ../src/riscv_pll/rvmyth_pll_tb.v
 vvp -v -N -lxt2 $RISCV_PLL_SBIN
+fi
 
 # Synthesis
-if command -v yosys; then
+for RTL in `find ../src -maxdepth 1 -type f -name '*.v' -not -path '*tb*'`
+do
     # yosys ../synth.ys
-    for RTL in `find ../src -maxdepth 1 -type f -name '*.v' -not -path '*tb*'`
-    do
-        # yosys -p "hierarchy -check; proc; opt; fsm; opt; write_json schematic.json" ../src/bin_counter.v
-        yosys -p "read -sv $RTL; synth_xilinx; stat"
-    done
-fi
+    # yosys -p "hierarchy -check; proc; opt; fsm; opt; write_json schematic.json" ../src/bin_counter.v
+    yosys -p "read -sv $RTL; synth_xilinx; stat"
+done
 
 if [ "$SHOW_WAVE" = "true" ]; then
     GTKWAVE_PID=`pgrep gtkwave || echo "none"`
@@ -81,3 +81,4 @@ if [ $FAILURE_NUM -gt 0 ]; then
 else
     echo "SIMULATION SUCCESS"
 fi
+
