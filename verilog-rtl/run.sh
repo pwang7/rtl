@@ -16,6 +16,17 @@ set -o xtrace
 # cpan install Switch
 # brew install yosys
 
+docker pull ghcr.io/chipsalliance/verible-linter-action
+#docker pull 0x01be/iverilog
+
+FILE_LIST=`find ./src -name "*v" -not -path "*.tlv"`
+# Format check
+docker run --rm -v `pwd`:`pwd` -w `pwd` --entrypoint verible-verilog-format ghcr.io/chipsalliance/verible-linter-action --failsafe_success=false --inplace --verbose $FILE_LIST
+# Lint check
+docker run --rm -v `pwd`:`pwd` -w `pwd` --entrypoint verible-verilog-lint ghcr.io/chipsalliance/verible-linter-action --ruleset=none --show_diagnostic_context $FILE_LIST
+
+
+
 SHOW_WAVE=${SHOW_WAVE:-"true"}
 
 WAVE_SBIN=wave.sbin

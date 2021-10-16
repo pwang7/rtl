@@ -42,16 +42,6 @@ jobs:
           pip3 install cocotb
           export PATH="$HOME/.local/bin:$PATH"
           #./run.sh
-      - name: Run Verible linter action
-        uses: chipsalliance/verible-linter-action@main
-        with:
-          paths: |
-            ./verilog-rtl/src
-          exclude_paths: |
-            ./verilog-rtl/others
-            ./verilog-rtl/training
-          extra_args: "--check_syntax=true"
-          github_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Setup tmate session
         if: ${{ failure() }}
         uses: mxschmitt/action-tmate@v3
