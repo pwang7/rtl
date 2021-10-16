@@ -4,6 +4,12 @@ set -o errexit
 set -o nounset
 set -o xtrace
 
+export RTL_PATH=`realpath wrra/`
+export TB_FILE=`pwd`
+export TOP_MODULE=WeightedArbiter
+export CLK_NAME=clk
+export CLK_PERIOD=4
+export RST_NAME=reset
 
 # export RTL_PATH=`realpath e203_cpu_top/rtl`
 # export TB_FILE=`realpath e203_cpu_top/tb/tb_top.v`
@@ -19,12 +25,12 @@ set -o xtrace
 # export CLK_PERIOD=10
 # export RST_NAME=s_rst_n
 
-export RTL_PATH=`realpath src/sdram/`
-export TB_FILE=`realpath src/sdram/tb_sdram_top.v`
-export TOP_MODULE=sdram_top
-export CLK_NAME=sclk
-export CLK_PERIOD=10
-export RST_NAME=reset
+# export RTL_PATH=`realpath src/sdram/`
+# export TB_FILE=`realpath src/sdram/tb_sdram_top.v`
+# export TOP_MODULE=sdram_top
+# export CLK_NAME=sclk
+# export CLK_PERIOD=10
+# export RST_NAME=reset
 
 # export RTL_PATH=`realpath others/basic_circuits/`
 # export TB_FILE=`pwd`
@@ -92,6 +98,8 @@ cp $PROJ_ROOT_PATH/simulate.sh $SCRIPT_PATH
 docker run --rm -it -p 5902:5902 --hostname lizhen --mac-address 02:42:ac:11:00:02 \
     -e PROJ_ROOT_PATH \
     -e RTL_PATH \
+    -e INCLUDE_PATH \
+    -e LIBRARY_PATH \
     -e TB_FILE \
     -e BUILD_PATH \
     -e TOP_MODULE \
@@ -101,6 +109,7 @@ docker run --rm -it -p 5902:5902 --hostname lizhen --mac-address 02:42:ac:11:00:
     -e DC_HOME \
     -e VERDI_HOME \
     -v $PROJ_ROOT_PATH:$PROJ_ROOT_PATH \
+    -v `realpath ~/Downloads/rust_cargo/rtl/apt`:/etc/apt \
     -w $WORK_PATH \
     --entrypoint $SCRIPT_PATH/synopsys_pre_run.sh \
     phyzli/ubuntu18.04_xfce4_vnc4server_synopsys2016
