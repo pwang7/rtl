@@ -1,0 +1,4 @@
+read_verilog example.v
+synth_xilinx -top example
+hilomap -hicell VCC P -locell GND G
+write_edif -nogndvcc example.edif

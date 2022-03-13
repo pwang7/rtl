@@ -1,0 +1,80 @@
+#! /bin/sh
+
+set -o errexit
+set -o nounset
+set -o xtrace
+
+# export SYNOPSYS_HOME=/usr/synopsys
+# export VERDI_HOME=$SYNOPSYS_HOME/verdi-L-2016.06-1
+# export LD_LIBRARY_PATH=$VERDI_HOME/share/PLI/VCS/LINUX64
+export VERDI_TRACEX_ENABLE=1
+export FSDB_GATE=0
+
+export VIVADO_SIM_LIB_PATH=/home/pwang/Downloads/rust_cargo/rtl/verilog-rtl/vcs_vivado_sim/vcs_vivado_2017.4_vo
+
+if [ -z $INCLUDE_PATH ]; then
+    INCLUDE_PATH=$RTL_PATH
+fi
+if [ -z $LIBRARY_PATH ]; then
+    LIBRARY_PATH=$RTL_PATH
+fi
+
+VHDL_LIST=vhdl.f
+VHDL_FILES=`find -L $RTL_PATH -type f -name '*.vhd*' -not -path '*tb*'`
+cat <<EOF >$VHDL_LIST
+$VHDL_FILES
+EOF
+
+XIL_LIB=xil_defaultlib
+LIB_DIR=vcs_lib
+SETUP_FILE=synopsys_sim.setup
+OTHER_SETUP_FILE=/home/pwang/Downloads/rust_cargo/rtl/verilog-rtl/$SETUP_FILE
+mkdir -p ./$LIB_DIR/$XIL_LIB
+cat <<EOF >$SETUP_FILE
+$XIL_LIB:$LIB_DIR/$XIL_LIB
+OTHERS=$OTHER_SETUP_FILE
+EOF
+
+vhdlan -work $XIL_LIB -full64 -gen_sv_pkg -f $VHDL_LIST -l vhdlan.log
+
+VERILOG_LIST=verilog.f
+VERILOG_FILES=`find -L $RTL_PATH -type f -name '*.v' -not -path '*tb*'`
+cat <<EOF >$VERILOG_LIST
+$VERILOG_FILES
+EOF
+
+vlogan -work $XIL_LIB -full64 +v2k +incdir+$INCLUDE_PATH -y $LIBRARY_PATH -f $VERILOG_LIST -l verilogan.log
+
+SYSTEM_VERILOG_LIST=sverilog.f
+SYSTEM_VERILOG_FILES=`find -L $RTL_PATH -type f -name '*.sv' -not -path '*tb*'`
+cat <<EOF >$SYSTEM_VERILOG_LIST
+$SYSTEM_VERILOG_FILES
+EOF
+
+vlogan -work $XIL_LIB -full64 -sverilog +incdir+$INCLUDE_PATH -y $LIBRARY_PATH -f $SYSTEM_VERILOG_LIST -l sverilogan.log
+
+vlogan -work $XIL_LIB -full64 +v2k +incdir+$INCLUDE_PATH -y $LIBRARY_PATH $TB_FILE -l tban.log
+
+cat <<EOF >dump_fsdb_vcs.tcl
+#global env
+fsdbDumpfile "$::env(TOP_MODULE).fsdb"
+fsdbDumpvars
+run
+#fsdbDumpoff
+#fsdbDumpon
+#run 200ns
+EOF
+
+vcs -full64 -lca -debug_pp -licqueue -j8 -notice +lint=all +memcbk -race=all $XIL_LIB.xrnic_exdes_tb $XIL_LIB.glbl -l elaborate.log
+#vcs -kdb -lca -sverilog +v2k -debug_access+all+reverse +vcs+lic+wait -full64 -j8 \
+#    -P $VERDI_HOME/share/PLI/VCS/LINUX64/novas.tab $VERDI_HOME/share/PLI/VCS/LINUX64/pli.a \
+#    -notice -y $LIBRARY_PATH +incdir+$INCLUDE_PATH +libext+.sv+.v +vhdllib+$XIL_LIB \
+#    +lint=all +memcbk -race=all -xzcheck -l vcs.log -f $VERILOG_LIST
+
+#./simv -fgp=num_threads:8 -ucli -i dump_fsdb_vcs.tcl -l sim.log +fsdb+autoflush -verdi
+./simv -fgp=num_threads:8 -ucli -i dump_fsdb_vcs.tcl -l sim.log +fsdb+autoflush
+
+verdi -sv -f $SYSTEM_VERILOG_LIST -top $TOP_MODULE -ssf $TOP_MODULE.fsdb -nologo
+#verdi -dbdir ./simv.daidir -nologo
+#verdi -ssf $TOP_MODULE.fsdb -nologo
+#verdi -elab ./simv.daidir/kdb -nologo

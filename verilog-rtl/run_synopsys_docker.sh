@@ -4,19 +4,12 @@ set -o errexit
 set -o nounset
 set -o xtrace
 
-export RTL_PATH=`realpath wrra/`
-export TB_FILE=`pwd`
-export TOP_MODULE=WeightedArbiter
+export RTL_PATH=`realpath e203_cpu_top/rtl`
+export TB_FILE=`realpath e203_cpu_top/tb/tb_top.v`
+export TOP_MODULE=e203_cpu_top
 export CLK_NAME=clk
-export CLK_PERIOD=4
-export RST_NAME=reset
-
-# export RTL_PATH=`realpath e203_cpu_top/rtl`
-# export TB_FILE=`realpath e203_cpu_top/tb/tb_top.v`
-# export TOP_MODULE=e203_cpu_top
-# export CLK_NAME=clk
-# export CLK_PERIOD=10
-# export RST_NAME=rst_n
+export CLK_PERIOD=10
+export RST_NAME=rst_n
 
 # export RTL_PATH=`realpath others/sdram_controller/sdram/`
 # export TB_FILE=`realpath others/sdram_controller/sdram/tb_sdram_top.v`
@@ -83,19 +76,12 @@ cp $PROJ_ROOT_PATH/compile.tcl $SCRIPT_PATH
 cp $PROJ_ROOT_PATH/synopsys_pre_run.sh $SCRIPT_PATH
 cp $PROJ_ROOT_PATH/simulate.sh $SCRIPT_PATH
 
-# docker run --rm -it \
-#     -e DISPLAY \
-#     -v $HOME/.Xauthority:/$HOME/.Xauthority \
-#     --user=$(id -u $USER):$(id -g $USER) \
-#     --workdir="/home/$USER" \
-#     --volume="/home/$USER:/home/$USER" \
-#     --volume="/etc/group:/etc/group:ro" \
-#     --volume="/etc/passwd:/etc/passwd:ro" \
-#     --volume="/etc/shadow:/etc/shadow:ro" \
-#     --volume="/etc/sudoers.d:/etc/sudoers.d:ro" \
-#     --volume="/tmp/.X11-unix:/tmp/.X11-unix:ro" \
-#     ubuntu
-docker run --rm -it -p 5902:5902 --hostname lizhen --mac-address 02:42:ac:11:00:02 \
+
+#docker run --rm -it -p 5902:5902 --hostname lizhen --mac-address 02:42:ac:11:00:02 \
+docker run --rm -it -p 5902:5902 --hostname `hostname` --mac-address 02:42:ac:11:00:02 \
+    -e DISPLAY \
+    -v /tmp/.X11-unix/:/tmp/.X11-unix/:ro \
+    -v $HOME/.Xauthority:/root/.Xauthority:ro \
     -e PROJ_ROOT_PATH \
     -e RTL_PATH \
     -e INCLUDE_PATH \

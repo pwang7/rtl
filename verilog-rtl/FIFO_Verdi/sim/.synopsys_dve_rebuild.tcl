@@ -1,0 +1,8 @@
+# DVE Simulation Rebuild/Restart Options
+# Saved on Sun Apr 26 17:59:23 2020
+set SIMSETUP::REBUILDOPTION 1
+set SIMSETUP::REBUILDCMD {vcs -f sim.f +v2k -debug_all}
+set SIMSETUP::REBUILDDIR {}
+set SIMSETUP::RESTOREBP 1
+set SIMSETUP::RESTOREDUMP 1
+set SIMSETUP::RESTOREFORCE 1
